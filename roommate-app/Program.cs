@@ -58,17 +58,19 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    //app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseHsts();
+    app.UseMigrationsEndPoint();
+
+    app.UseMiddleware<JwtMiddleware>();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseCors("CORSPolicy");
-
 app.UseRouting();
+app.UseCors("CORSPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

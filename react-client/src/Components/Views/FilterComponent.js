@@ -119,6 +119,5 @@ export const FilterComponent = (props) => {
                     onClick={getFilteredListings}
                 > FILTER</div1>
             </div>
-        </div>
     );
 }

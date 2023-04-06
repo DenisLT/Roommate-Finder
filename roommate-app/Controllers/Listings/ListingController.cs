@@ -6,7 +6,7 @@ using roommate_app.Other.ListingComparers;
 using roommate_app.Services;
 using System.Diagnostics.CodeAnalysis;
 
-namespace roommate_app.Controllers;
+namespace roommate_app.Controllers.Listings;
 
 [ApiController]
 [Route("[controller]")]
@@ -73,13 +73,13 @@ public class ListingController : Controller
         listing.UserId = user.Id;
         listing.User = user;
 
-        var response = new JsonResult(new Object());
+        var response = new JsonResult(new object());
         var isInternalServerError = false;
         var message = "";
 
         try
         {
-            await _genericService.AddAsync<Listing>(listing);
+            await _genericService.AddAsync(listing);
             existingListings.Add(listing);
         }
         catch (ArgumentNullException e)
@@ -108,7 +108,8 @@ public class ListingController : Controller
         {
             response = new JsonResult(message);
             response.StatusCode = 500;
-        } else
+        }
+        else
         {
             response = new JsonResult(await _genericService.GetAllAsync<Listing>());
             response.StatusCode = 201;
@@ -121,7 +122,7 @@ public class ListingController : Controller
     [Route("update")]
     public async Task<ActionResult> UpdateListing([FromBody] Listing listing)
     {
-        var response = new JsonResult(new Object());
+        var response = new JsonResult(new object());
         var isInternalServerError = false;
         var message = "";
 
@@ -148,7 +149,8 @@ public class ListingController : Controller
         {
             response = new JsonResult(message);
             response.StatusCode = 500;
-        } else
+        }
+        else
         {
             response = new JsonResult("Listing updated");
             response.StatusCode = 200;
@@ -161,13 +163,13 @@ public class ListingController : Controller
     [Route("delete")]
     public async Task<ActionResult> DeleteListing([FromBody] Listing listing)
     {
-        var response = new JsonResult(new Object());
+        var response = new JsonResult(new object());
         var isInternalServerError = false;
         var message = "";
 
         try
         {
-            await _genericService.DeleteAsync<Listing>(listing.Id) ;
+            await _genericService.DeleteAsync<Listing>(listing.Id);
         }
         catch (SqlException e)
         {
@@ -207,7 +209,7 @@ public class ListingController : Controller
         var response = new JsonResult(listings);
         response.StatusCode = 200;
 
-        
+
         return response;
     }
 }

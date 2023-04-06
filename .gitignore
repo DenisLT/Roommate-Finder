@@ -7,3 +7,4 @@ LocalDatabase*
 log.txt
 roommate-app-testing.UnitTests/obj/**
 roommate-app-testing.UnitTests/bin/**
+roommate-app-testing.UnitTests/bin/Debug/net6.0/roommate-app.staticwebassets.runtime.json

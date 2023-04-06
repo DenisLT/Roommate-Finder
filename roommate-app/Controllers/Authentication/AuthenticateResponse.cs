@@ -15,9 +15,9 @@ namespace roommate_app.Controllers.Authentication
         public string Token { get; set; }
 
 
-        public AuthenticateResponse(bool b, User user, string token)
+        public AuthenticateResponse(bool authSuccess, User user, string token)
         {
-            SuccessfulLogin = b;
+            SuccessfulLogin = authSuccess;
             Id = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;

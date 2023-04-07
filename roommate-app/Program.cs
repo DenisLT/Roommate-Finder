@@ -28,7 +28,8 @@ builder.Services.AddCors((options) =>
             builder
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .WithOrigins("http://localhost:3000");
+            .SetIsOriginAllowed(origin => true)
+            .AllowCredentials();
         });
 });
 
@@ -46,6 +47,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IGenericService, GenericService>();
 builder.Services.AddScoped<IReplyService, ReplyService>();
+builder.Services.AddScoped<IFavoritesService, FavoritesService>();
+builder.Services.AddScoped<IRatingsService, RatingsService>();
 
 var app = builder.Build();
 

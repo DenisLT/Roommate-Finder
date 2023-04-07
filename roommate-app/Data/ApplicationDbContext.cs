@@ -16,4 +16,6 @@ public class ApplicationDbContext : IdentityDbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Reply> Replies { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
+    public DbSet<Favorited> Favorites { get; set; }
 }

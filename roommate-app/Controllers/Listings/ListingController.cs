@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Org.BouncyCastle.Bcpg;
 using roommate_app.Exceptions;
 using roommate_app.Models;
 using roommate_app.Other.ListingComparers;
+using roommate_app.Other.Services;
 using roommate_app.Services;
 using System.Diagnostics.CodeAnalysis;
 
@@ -17,30 +19,37 @@ public class ListingController : Controller
     private readonly IErrorLogging _errorLogging;
     private readonly IListingService _listingService;
     private readonly IGenericService _genericService;
+    private readonly IFavoritesService _favoritesService;
 
     public ListingController(
         IListingCompreterFactory listingFactory,
         IErrorLogging errorLogging,
         IListingService listingService,
-        IGenericService genericService
+        IGenericService genericService,
+        IFavoritesService favoritesService
         )
     {
         _listingFactory = listingFactory;
         _errorLogging = errorLogging;
         _listingService = listingService;
         _genericService = genericService;
+        _favoritesService = favoritesService;
     }
 
     [HttpGet]
     [Route("sort")]
     public async Task<JsonResult> GetSortedListings(SortMode sort, string city)
-    {
+    {   
         var existingListings = await _genericService.GetAllAsync<Listing>();
 
         var factory = _listingFactory.createListingComparerFactory();
         var comparer = factory.GetComparer(sortMode: sort, city: city);
 
         existingListings.Sort(comparer);
+
+        User user = (User)HttpContext.Items["User"];
+        if(user != null)
+            existingListings.ForEach(l => l.isFavorite = _favoritesService.IsFavorite(user.Id, l.Id));
 
         var response = new JsonResult(existingListings);
         response.StatusCode = 200;

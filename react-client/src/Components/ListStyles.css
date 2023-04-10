@@ -22,6 +22,35 @@ ul.lineSeparated li {
 }
 
 .listingCity {
+    display: inline-block;
+}
+
+.starUnfavorited {
+    float: right;
+    background-color: black;
+    mask-image: url(../Icons/star/light.svg);
+    mask-size: 20px 20px;
+    height: 20px;
+    width: 20px;
+}
+
+.starUnfavorited:hover {
+    background-color: rgb(224, 209, 1);
+    mask-image: url(../Icons/star/regular.svg);
+}
+
+.starFavorited {
+    float: right;
+    background-color: rgb(224, 209, 1);
+    mask-image: url(../Icons/star/regular.svg);
+    mask-size: 20px 20px;
+    height: 20px;
+    width: 20px;
+}
+
+.starFavorited:hover {
+    background-color: rgb(224, 209, 1);
+    mask-image: url(../Icons/star/regular.svg);
 }
 
 .listingDate {
@@ -41,8 +70,6 @@ ul.lineSeparated li {
     color: #90BB1F;
 }
 
-.listingTexts {
-}
 
 .listingTextReview {
     padding: 0 0 7px 0;

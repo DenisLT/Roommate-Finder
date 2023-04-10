@@ -28,7 +28,8 @@ public class FavoritesService : IFavoritesService
 
     public void RemoveFavorite(int userId, int listingId)
     {
-        _context.Favorites.Remove(new Favorited { UserId = userId, ListingId = listingId });
+        var favorited = _context.Favorites.FirstOrDefault(f => f.UserId == userId && f.ListingId == listingId);
+        _context.Favorites.Remove(favorited);
         _context.SaveChanges();
     }
 

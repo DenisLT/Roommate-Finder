@@ -18,7 +18,7 @@ export class ListOfListings extends Component {
     }
 
     handleChange = (e) => {
-        this.setState({replyInputValue: e.target.value});
+        this.setState({ replyInputValue: e.target.value });
     }
 
     handleEnter = (e, id) => {
@@ -36,7 +36,7 @@ export class ListOfListings extends Component {
                 }
             }).then((response) => {
                 this.getReplies(id);
-                this.setState({replyInputValue: ""});
+                this.setState({ replyInputValue: "" });
             });
         }
     }
@@ -47,66 +47,74 @@ export class ListOfListings extends Component {
                 id: id
             }
         }).then(response => {
-            this.setState({replies: response.data});
+            this.setState({ replies: response.data });
         })
     }
 
+    toggleFavorite = (listing) => {
+        this.props.toggleFavorite(listing);
+    }
+
     toggleReplies = (id) => {
-        this.setState({repliesView: id});
+        this.setState({ repliesView: id });
     }
 
     render() {
         return (
             <ul className="lineSeparated">
                 <hr className="line" />
-                    {
-                        this.props.listings
-                            .map((listing, index) =>
-                                <li className="mainListing" key={index}>
+                {
+                    this.props.listings
+                        .map((listing, index) =>
+                            <li className="mainListing" key={index}>
 
-                                    <div className="listingInfo">
+                                <div className="listingInfo">
+                                    <div>
                                         <div className="listingCity">
                                             {listing.city}
                                         </div>
-                                        <div className="listingDate">
-                                            {listing.date}
+                                        <div className={listing.isFavorite ? "starFavorited" : "starUnfavorited"}
+                                            onClick={() => { this.toggleFavorite(listing) }}></div>
+                                    </div>
+                                    <div className="listingDate">
+                                        {listing.date}
+                                    </div>
+                                    <button
+                                        onClick={() => { this.props.toggleEditListingView(listing, listing.email == this.props.currentUser.email); }}
+                                    >Edit</button>
+                                    <button
+                                        onClick={() => { this.props.toggleDeleteListingView(listing, listing.email == this.props.currentUser.email); }}
+                                    >Delete</button>
+                                    <br />
+                                    <button
+                                        onClick={() => { this.toggleReplies(listing.id); this.getReplies(listing.id) }}
+                                    >Replies</button>
+                                </div>
+
+                                <div className="listingReview ">
+                                    <div className="listingName" >{listing.firstName} {listing.lastName} </div>
+
+                                    <div className="listingTexts">
+                                        <div className="listingTextReview">
+                                            {listing.extraComment}
                                         </div>
-                                        <button
-                                            onClick={() => {this.props.toggleEditListingView(listing, listing.email == this.props.currentUser.email);}}
-                                        >Edit</button>
-                                        <button
-                                            onClick={() => { this.props.toggleDeleteListingView(listing, listing.email == this.props.currentUser.email);}}
-                                        >Delete</button>
-                                        <br/>
-                                        <button 
-                                            onClick={() => {this.toggleReplies(listing.id); this.getReplies(listing.id)}}
-                                        >Replies</button>
+                                        <div className="listingMoreDetails">
+                                            Prefered number of roommates: {listing.roommateCount}
+                                        </div>
+                                        <div className="listingContacts">
+                                            {listing.phone}, {listing.email}
+                                        </div>
                                     </div>
 
-                                    <div className="listingReview ">
-                                        <div className="listingName" >{listing.firstName} {listing.lastName} </div>
+                                    <div className="listingPrice">
+                                        <span>
+                                            {listing.maxPrice} &#8364;
+                                        </span>
+                                    </div>
 
-                                        <div className="listingTexts">
-                                            <div className="listingTextReview">
-                                                {listing.extraComment}
-                                            </div>
-                                            <div className="listingMoreDetails">
-                                                Prefered number of roommates: {listing.roommateCount}
-                                            </div>
-                                            <div className="listingContacts">
-                                                {listing.phone}, {listing.email}
-                                            </div>
-                                        </div>
-
-                                        <div className="listingPrice">
-                                            <span>
-                                                {listing.maxPrice} &#8364;
-                                            </span>
-                                        </div>
-
-                                        {
-                                            this.state.repliesView == listing.id &&
-                                            <>
+                                    {
+                                        this.state.repliesView == listing.id &&
+                                        <>
                                             {
                                                 this.state.replies &&
                                                 this.state.replies.map((reply) => {
@@ -118,18 +126,18 @@ export class ListOfListings extends Component {
                                             <input
                                                 type="text"
                                                 onChange={this.handleChange}
-                                                onKeyDown={(e) => {this.handleEnter(e, listing.id)}}
+                                                onKeyDown={(e) => { this.handleEnter(e, listing.id) }}
                                                 value={this.state.replyInputValue}
                                                 placeholder="Reply to this listing"
                                             />
-                                            </>
-                                        }
-                                        
-                                    </div>
-                                    <hr className="line" />
-                                </li>
-                            )
-                    }
+                                        </>
+                                    }
+
+                                </div>
+                                <hr className="line" />
+                            </li>
+                        )
+                }
             </ul>
         );
     }

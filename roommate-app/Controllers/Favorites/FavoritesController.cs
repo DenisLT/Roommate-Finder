@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using roommate_app.Models;
 using roommate_app.Other.Services;
 using System.Diagnostics.CodeAnalysis;
 
@@ -11,16 +12,20 @@ namespace roommate_app.Controllers.Favorites;
 public class FavoritesController : Controller
 {
     private readonly IFavoritesService _favoritesService;
+    private readonly IGenericService _genericService;
 
-    public FavoritesController(IFavoritesService favoritesService)
+    public FavoritesController(IFavoritesService favoritesService, IGenericService genericService)
     {
         _favoritesService = favoritesService;
+        _genericService = genericService;
     }
-
+    
     [HttpGet]
-    public IActionResult GetFavorites(int userId)
+    public async Task<IActionResult> GetFavoriteListings(int userId)
     {
-        var favorites = _favoritesService.GetFavorites(userId);
+        var favorites = await _genericService.GetAllAsync<Listing>();
+        favorites.ForEach(l => l.isFavorite = _favoritesService.IsFavorite(userId, l.Id));
+        favorites = favorites.Where(l => l.isFavorite).ToList();
         return Ok(favorites);
     }
 

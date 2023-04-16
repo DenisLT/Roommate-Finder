@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using roommate_app.Models;
 using roommate_app.Other.Services;
 using System.Diagnostics.CodeAnalysis;
 
@@ -11,6 +12,7 @@ namespace roommate_app.Controllers.Favorites;
 public class RatingsController : Controller
 {
     private readonly IRatingsService _ratingsService;
+    private User user;
 
     public RatingsController(IRatingsService ratingsService)
     {
@@ -27,11 +29,12 @@ public class RatingsController : Controller
     [HttpPost]
     public IActionResult AddRating([FromBody] RatingRequest ratingRequest)
     {
+        user = (User)HttpContext.Items["User"];
         if (ratingRequest.Rating < 1 || ratingRequest.Rating > 5)
             return StatusCode(StatusCodes.Status400BadRequest, "Rating must be between 1 and 5");
         try
         {
-            _ratingsService.AddRating(ratingRequest.UserId, ratingRequest.ListingId, ratingRequest.Rating);
+            _ratingsService.AddRating(user.Id, ratingRequest.ListingId, ratingRequest.Rating);
         }
         catch (Exception e)
         {
@@ -43,9 +46,10 @@ public class RatingsController : Controller
     [HttpDelete]
     public IActionResult DeleteRating([FromBody] RatingRequest ratingRequest)
     {
+        user = (User)HttpContext.Items["User"];
         try
         {
-            _ratingsService.RemoveRating(ratingRequest.UserId, ratingRequest.ListingId);
+            _ratingsService.RemoveRating(user.Id, ratingRequest.ListingId);
         }
         catch (Exception e)
         {

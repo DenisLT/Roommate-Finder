@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { useState } from 'react';
 import "./ListStyles.css";
 import axios from 'axios';
+import { RatingComponent } from './Views/RatingComponent';
 
 export class ListOfListings extends Component {
 
@@ -89,6 +90,7 @@ export class ListOfListings extends Component {
                                     <button
                                         onClick={() => { this.toggleReplies(listing.id); this.getReplies(listing.id) }}
                                     >Replies</button>
+                                    <RatingComponent listing={listing} />
                                 </div>
 
                                 <div className="listingReview ">

@@ -20,7 +20,17 @@ public class Listing
     public virtual User User { get; set; }
 
     [NotMapped]
-    public bool isFavorite { get; set; }
+    public bool IsFavorite { get; set; }
+
+    [NotMapped]
+    public double Rating { get; set; }
+    [NotMapped]
+    public int RatingCount { get; set; }
+    [NotMapped]
+    public bool UserHasRated { get; set; }
+    [NotMapped]
+    public int UserRating { get; set; }
+
 
     public string FullName()
     {

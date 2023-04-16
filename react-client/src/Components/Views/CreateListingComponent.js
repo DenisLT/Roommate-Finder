@@ -19,8 +19,8 @@ const cityOptions = []
 
 export const CreateListingComponent = (props) => {
 
-    for(let i = 0; i < LithuanianCities.length; ++i){
-        cityOptions[i] = {value: i, label: LithuanianCities[i]}
+    for (let i = 0; i < LithuanianCities.length; ++i) {
+        cityOptions[i] = { value: i, label: LithuanianCities[i] }
     }
 
     const [responseMessage, setResponseMessage] = useState("");
@@ -39,7 +39,13 @@ export const CreateListingComponent = (props) => {
             extraComment: "",
             date: "",
             userid: 0,
-            user: {Id: 0, FirstName: "", LastName: "", Email: "", Password:"", City: ""}
+            rating: 0,
+            isFavorite: false,
+            rating: 0,
+            ratingCount: 0,
+            userHasRated: false,
+            userRating: 0,
+            user: { Id: 0, FirstName: "", LastName: "", Email: "", Password: "", City: "" }
         },
         validationSchema: Yup.object({
             firstName: Yup
@@ -81,114 +87,114 @@ export const CreateListingComponent = (props) => {
                 console.log(response.data);
                 props.toggleCreateListing(false);
             })
-            }
         }
+    }
     )
 
     return (
         <>
-        <div className="centered-container create-listing-container">
-            <form onSubmit={formik.handleSubmit}>
-                <div className="form-field-container-flex">
-                    <div className="form-field-flex"><label htmlFor="firstName">First name</label></div>
-                    <div className="form-field-flex">
-                        <input
-                            name="firstName"
-                            id="firstName"
-                            type="text"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.firstName}
-                        />
-                        {
-                            formik.touched.firstName && formik.errors.firstName &&
+            <div className="centered-container create-listing-container">
+                <form onSubmit={formik.handleSubmit}>
+                    <div className="form-field-container-flex">
+                        <div className="form-field-flex"><label htmlFor="firstName">First name</label></div>
+                        <div className="form-field-flex">
+                            <input
+                                name="firstName"
+                                id="firstName"
+                                type="text"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.firstName}
+                            />
+                            {
+                                formik.touched.firstName && formik.errors.firstName &&
                                 <p style={{ color: "red", margin: "0", padding: "0", fontSize: "10px" }}>
                                     {formik.errors.firstName}
                                 </p>
-                        }
+                            }
+                        </div>
                     </div>
-                </div>
-                <div className="form-field-container-flex">
-                    <div className="form-field-flex"><label htmlFor="lastName">Last name</label></div>
-                    <div className="form-field-flex">
-                        <input
-                            name="lastName"
-                            id="lastName"
-                            type="text"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.lastName}
-                        />
-                        {
-                            formik.touched.lastName && formik.errors.lastName &&
+                    <div className="form-field-container-flex">
+                        <div className="form-field-flex"><label htmlFor="lastName">Last name</label></div>
+                        <div className="form-field-flex">
+                            <input
+                                name="lastName"
+                                id="lastName"
+                                type="text"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.lastName}
+                            />
+                            {
+                                formik.touched.lastName && formik.errors.lastName &&
                                 <p style={{ color: "red", margin: "0", padding: "0", fontSize: "10px" }}>
                                     {formik.errors.lastName}
                                 </p>
-                        }
+                            }
+                        </div>
                     </div>
-                </div>
-                <div className="form-field-container-flex">
-                    <div className="form-field-flex"><label htmlFor="email">Email</label></div>
-                    <div className="form-field-flex">
-                        <input
-                            name="email"
-                            id="email"
-                            type="email"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.email}
-                        />
-                        {
-                            formik.touched.email && formik.errors.email && 
+                    <div className="form-field-container-flex">
+                        <div className="form-field-flex"><label htmlFor="email">Email</label></div>
+                        <div className="form-field-flex">
+                            <input
+                                name="email"
+                                id="email"
+                                type="email"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.email}
+                            />
+                            {
+                                formik.touched.email && formik.errors.email &&
                                 <p style={{ color: "red", margin: "0", padding: "0", fontSize: "10px" }}>
                                     {formik.errors.email}
                                 </p>
-                        }
+                            }
+                        </div>
                     </div>
-                </div>
-                <div className="form-field-container-flex">
-                    <div className="form-field-flex"><label htmlFor="phone">Phone Number</label></div>
-                    <div className="form-field-flex">
-                        <input
-                            name="phone"
-                            id="phone"
-                            type="phone"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.phone}
-                        />
-                        {
-                            formik.touched.phone && formik.errors.phone && 
+                    <div className="form-field-container-flex">
+                        <div className="form-field-flex"><label htmlFor="phone">Phone Number</label></div>
+                        <div className="form-field-flex">
+                            <input
+                                name="phone"
+                                id="phone"
+                                type="phone"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.phone}
+                            />
+                            {
+                                formik.touched.phone && formik.errors.phone &&
                                 <p style={{ color: "red", margin: "0", padding: "0", fontSize: "10px" }}>
                                     {formik.errors.phone}
                                 </p>
-                        }
+                            }
+                        </div>
                     </div>
-                </div>
-                <div className="form-field-container-flex">
-                    <div className="form-field-flex"><label htmlFor="city">City</label></div>
-                    <div className="form-field-flex">
-                        <CitySelect
-                            options={cityOptions}
-                            value={formik.values.city}
-                            className={'number'}
-                            onChange={value => formik.setFieldValue('city',value.label)}
-                        />
+                    <div className="form-field-container-flex">
+                        <div className="form-field-flex"><label htmlFor="city">City</label></div>
+                        <div className="form-field-flex">
+                            <CitySelect
+                                options={cityOptions}
+                                value={formik.values.city}
+                                className={'number'}
+                                onChange={value => formik.setFieldValue('city', value.label)}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="form-field-container-flex">
-                    <div className="form-field-flex"><label htmlFor="roomateCount">Number of Roommates</label></div>
-                    <div className="form-field-flex">
-                        <CustomRoommates
-                            options={options}
-                            value={formik.values.roommateCount}
-                            className={"roommateCount"}
-                            onChange={value => formik.setFieldValue('roommateCount',value.value)}
-                        />
+                    <div className="form-field-container-flex">
+                        <div className="form-field-flex"><label htmlFor="roomateCount">Number of Roommates</label></div>
+                        <div className="form-field-flex">
+                            <CustomRoommates
+                                options={options}
+                                value={formik.values.roommateCount}
+                                className={"roommateCount"}
+                                onChange={value => formik.setFieldValue('roommateCount', value.value)}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="form-field-container-flex">
-                    <div className="form-field-flex"><label htmlFor="price">Maximum Price:</label></div>
+                    <div className="form-field-container-flex">
+                        <div className="form-field-flex"><label htmlFor="price">Maximum Price:</label></div>
                         <div className="form-field-flex" style={{ height: "150px" }}>
                             <Slider
                                 styles={{
@@ -206,7 +212,7 @@ export const CreateListingComponent = (props) => {
                                         opacity: 0.5
                                     }
                                 }}
-                                xmax={5000} 
+                                xmax={5000}
                                 axis="x"
                                 x={state.x}
                                 xStep={50}
@@ -217,33 +223,33 @@ export const CreateListingComponent = (props) => {
                                 value={formik.values.maxPrice = state.x}>
                             </Slider>
                             <div>{state.x} &#8364;</div>
+                        </div>
                     </div>
-                </div>
-                <div className="form-field-container-flex">
-                    <div className="form-field-flex"><label htmlFor="extraComment">Extra Comment * </label></div>
-                    <div className="form-field-flex">
-                        <input
-                            name="extraComment"
-                            id="extraComment"
-                            type="extraComment"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.extraComment}
-                        />
-                        {
-                            formik.touched.extraComment && formik.errors.extraComment &&
+                    <div className="form-field-container-flex">
+                        <div className="form-field-flex"><label htmlFor="extraComment">Extra Comment * </label></div>
+                        <div className="form-field-flex">
+                            <input
+                                name="extraComment"
+                                id="extraComment"
+                                type="extraComment"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.extraComment}
+                            />
+                            {
+                                formik.touched.extraComment && formik.errors.extraComment &&
                                 <p style={{ color: "red", margin: "0", padding: "0", fontSize: "10px" }}>
                                     {formik.errors.extraComment}
                                 </p>
-                        }
+                            }
+                        </div>
                     </div>
-                </div>
-                <button type="submit">Submit</button>
-            </form>
-            <small>   * - Optional Fields</small>
-            <p>{responseMessage}</p>
-        </div>
+                    <button type="submit">Submit</button>
+                </form>
+                <small>   * - Optional Fields</small>
+                <p>{responseMessage}</p>
+            </div>
         </>
     )
 }
- 
+

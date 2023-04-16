@@ -24,8 +24,8 @@ public class FavoritesController : Controller
     public async Task<IActionResult> GetFavoriteListings(int userId)
     {
         var favorites = await _genericService.GetAllAsync<Listing>();
-        favorites.ForEach(l => l.isFavorite = _favoritesService.IsFavorite(userId, l.Id));
-        favorites = favorites.Where(l => l.isFavorite).ToList();
+        favorites.ForEach(l => l.IsFavorite = _favoritesService.IsFavorite(userId, l.Id));
+        favorites = favorites.Where(l => l.IsFavorite).ToList();
         return Ok(favorites);
     }
 

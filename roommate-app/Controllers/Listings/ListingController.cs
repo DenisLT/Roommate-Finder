@@ -20,13 +20,17 @@ public class ListingController : Controller
     private readonly IListingService _listingService;
     private readonly IGenericService _genericService;
     private readonly IFavoritesService _favoritesService;
+    private readonly IRatingsService _ratingsService;
+
+    private User user;
 
     public ListingController(
         IListingCompreterFactory listingFactory,
         IErrorLogging errorLogging,
         IListingService listingService,
         IGenericService genericService,
-        IFavoritesService favoritesService
+        IFavoritesService favoritesService,
+        IRatingsService ratingsService
         )
     {
         _listingFactory = listingFactory;
@@ -34,12 +38,26 @@ public class ListingController : Controller
         _listingService = listingService;
         _genericService = genericService;
         _favoritesService = favoritesService;
+        _ratingsService = ratingsService;
+    }
+
+    void addDataToListing(Listing listing)
+    {
+        listing.IsFavorite = _favoritesService.IsFavorite(user.Id, listing.Id);
+        listing.RatingCount = _ratingsService.GetRatingsCount(listing.Id);
+        if (listing.RatingCount > 0)
+            listing.Rating = _ratingsService.GetRating(listing.Id);
+        listing.UserHasRated = _ratingsService.UserHasRated(user.Id, listing.Id);
+        if (listing.UserHasRated)
+            listing.UserRating = _ratingsService.GetUserRating(user.Id, listing.Id);
     }
 
     [HttpGet]
     [Route("sort")]
     public async Task<JsonResult> GetSortedListings(SortMode sort, string city)
-    {   
+    {
+        user = (User)HttpContext.Items["User"];
+
         var existingListings = await _genericService.GetAllAsync<Listing>();
 
         var factory = _listingFactory.createListingComparerFactory();
@@ -47,9 +65,8 @@ public class ListingController : Controller
 
         existingListings.Sort(comparer);
 
-        User user = (User)HttpContext.Items["User"];
         if(user != null)
-            existingListings.ForEach(l => l.isFavorite = _favoritesService.IsFavorite(user.Id, l.Id));
+            existingListings.ForEach(l => addDataToListing(l));
 
         var response = new JsonResult(existingListings);
         response.StatusCode = 200;

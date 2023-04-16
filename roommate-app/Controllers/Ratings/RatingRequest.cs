@@ -6,9 +6,6 @@ namespace roommate_app.Controllers.Favorites
     {
         [Required]
         public int ListingId { get; set; }
-        [Required]
-        public int UserId { get; set; }
-        [Required]
         public int Rating { get; set; }
     }
 }
